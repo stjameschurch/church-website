@@ -10,8 +10,19 @@ const YOUTUBE_PLAYLIST_ID = "PLxVbRXKjzf4ZysNMtoLk949yNIr37VMVy";
 const API_KEY = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY!;
 const CHANNEL_ID = process.env.NEXT_PUBLIC_YOUTUBE_CHANNEL_ID!;
 
+interface VideoItem {
+  id: string;
+  snippet: {
+    title: string;
+    publishedAt: string;
+    resourceId: {
+      videoId: string;
+    };
+  };
+}
+
 export default function Home() {
-  const [videos, setVideos] = useState([]);
+  const [videos, setVideos] = useState<VideoItem[]>([]);
   const [liveVideoId, setLiveVideoId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -59,21 +70,20 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white text-gray-800">
 
-      {/* Hero Section with Background */}
+      {/* Hero Section */}
       <section className="relative w-full h-screen flex flex-col items-center justify-center text-center px-4 overflow-hidden">
-        {/* Background Image with Blur */}
+        {/* Background */}
         <div className="absolute inset-0 z-0">
           <img
             src="/backgrounds/hero.jpg"
             alt="Worship Background"
-            className="w-full h-full object-cover filter blur-0 scale-110"
+            className="w-full h-full object-cover scale-110"
           />
           <div className="absolute inset-0 bg-white/60 backdrop-blur-sm"></div>
         </div>
 
         {/* Foreground Content */}
         <motion.h2
-          
           className="z-10 text-5xl md:text-6xl font-bold mb-4 text-blue-900"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -98,16 +108,27 @@ export default function Home() {
           Sunday Service – 9:30 AM | Daily Service – 7:30 PM
         </motion.p>
         <div className="z-10 flex flex-col md:flex-row gap-4">
-          <Button size="lg" className="text-white bg-red-600 hover:bg-red-700">
-            <Youtube className="mr-2 h-5 w-5" /> Watch Live on YouTube
+          <Button asChild size="lg" className="text-white bg-red-600 hover:bg-red-700">
+            <a
+              href={`https://www.youtube.com/channel/${CHANNEL_ID}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Youtube className="mr-2 h-5 w-5" />
+              Watch Live on YouTube
+            </a>
           </Button>
-          <Button size="lg" variant="outline">
+          <Button
+            size="lg"
+            variant="outline"
+            onClick={() => window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" })}
+          >
             Submit a Prayer Request
           </Button>
         </div>
       </section>
 
-      {/* Livestream Section */}
+      {/* Livestream */}
       <section className="bg-gray-100 py-16 px-4 md:px-24">
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-3xl font-bold mb-6 text-blue-900">Sunday Livestream</h2>
@@ -128,7 +149,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Prayer Form */}
+      {/* Prayer Request Form */}
       <section className="bg-white py-16 px-4 md:px-24">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl font-bold mb-4 text-blue-800">Need Prayer?</h2>
@@ -159,7 +180,7 @@ export default function Home() {
         <h2 className="text-3xl font-bold text-blue-800 mb-6">Recent Sermons</h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {videos.length > 0 ? (
-            videos.map((video: any) => (
+            videos.map((video) => (
               <Card key={video.id} className="shadow-lg">
                 <CardContent className="p-4">
                   <iframe
@@ -190,7 +211,7 @@ export default function Home() {
             <h3 className="text-xl font-semibold mb-2">St. James Church</h3>
             <p>Jacobpuram, Tirunelveli Dist., Tamil Nadu, INDIA</p>
             <p>Email: stjameschurchofficial@gmail.com</p>
-            <p>Phone: </p>
+            <p>Phone: +91 98765 43210</p>
           </div>
           <div>
             <h3 className="text-xl font-semibold mb-2">Follow Us</h3>
